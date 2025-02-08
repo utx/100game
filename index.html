@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test App</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin-top: 50px;
+        }
+        #question {
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+        #answer {
+            font-size: 18px;
+            margin-bottom: 20px;
+        }
+        #feedback {
+            font-size: 18px;
+            margin-bottom: 20px;
+        }
+        #score {
+            font-size: 20px;
+            margin-top: 20px;
+        }
+        .correct {
+            color: green;
+        }
+        .wrong {
+            color: red;
+        }
+        #encouragement {
+            font-size: 20px;
+            margin-top: 20px;
+            color: blue;
+        }
+        #fun-image {
+            display: none;
+            width: 100px;
+            height: 100px;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div id="question"></div>
+    <input type="number" id="answer" placeholder="Your answer">
+    <button onclick="checkAnswer()">Submit</button>
+    <div id="feedback"></div>
+    <div id="score">Score: 0</div>
+    <div id="encouragement"></div>
+    <img id="fun-image" src="" alt="Fun Image!">
+
+    <script>
+        let num, correctAnswer, score = 0, numQuestions = 10, currentQuestion = 0;
+        const encouragingMessages = [
+            "Way to go, little dude! You're the best!",
+            "You're on fire, bro!",
+            "Keep it up, champ!",
+            "You're crushing it!",
+            "Awesome sauce!",
+            "You're a math whiz!",
+            "High five! You rock!",
+            "You're unstoppable!",
+            "Fantastic job!",
+            "You're a genius!",
+            "You're killing it!",
+            "You're the GOAT!",
+            "You're a legend!",
+            "You're a rockstar!",
+            "You're a math ninja!",
+            "You're a superstar!",
+            "You're a math hero!",
+            "You're a math champion!",
+            "You're a math master!",
+            "You're a math prodigy!"
+        ];
+        const imagePaths = ['pics/frog.jpg', 'pics/girl1.jpg'];
+
+        function generateQuestion() {
+            num = Math.floor(Math.random() * 100);
+            correctAnswer = 100 - num;
+            document.getElementById('question').innerText = `What can we add to ${num} to get to 100?`;
+            document.getElementById('answer').value = '';
+            document.getElementById('feedback').innerText = '';
+            document.getElementById('feedback').className = '';
+            document.getElementById('encouragement').innerText = '';
+            document.getElementById('fun-image').style.display = 'none';
+        }
+
+        function checkAnswer() {
+            const userAnswer = parseInt(document.getElementById('answer').value);
+            const feedbackElement = document.getElementById('feedback');
+            if (userAnswer === correctAnswer) {
+                feedbackElement.innerText = 'Correct!';
+                feedbackElement.className = 'correct';
+                document.getElementById('fun-image').style.display = 'inline';
+                document.getElementById('encouragement').innerText = getRandomEncouragingMessage();
+                document.getElementById('fun-image').src = getRandomImagePath();
+                score++;
+            } else {
+                feedbackElement.innerText = `Wrong! The correct answer is ${correctAnswer}.`;
+                feedbackElement.className = 'wrong';
+            }
+            document.getElementById('score').innerText = `Score: ${score}`;
+            currentQuestion++;
+            if (currentQuestion < numQuestions) {
+                setTimeout(generateQuestion, 1000); // Wait 1 second before showing the next question
+            } else {
+                document.getElementById('question').innerText = `Your final score is ${score}/${numQuestions}.`;
+                document.getElementById('answer').style.display = 'none';
+                document.getElementById('feedback').innerText = '';
+            }
+        }
+
+        function getRandomEncouragingMessage() {
+            const randomIndex = Math.floor(Math.random() * encouragingMessages.length);
+            return encouragingMessages[randomIndex];
+        }
+
+        function getRandomImagePath() {
+            const randomIndex = Math.floor(Math.random() * imagePaths.length);
+            return imagePaths[randomIndex];
+        }
+
+        generateQuestion();
+    </script>
+</body>
+</html>
