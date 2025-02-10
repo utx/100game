@@ -1,133 +1,272 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Test App</title>
+    <title>Math Adventure Game</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Comic Sans MS', cursive;
             text-align: center;
-            margin-top: 50px;
+            margin: 0;
+            padding: 20px;
+            transition: background-color 0.5s;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
-        #question {
+
+        #scoreboard {
             font-size: 24px;
             margin-bottom: 20px;
         }
-        #answer {
-            font-size: 18px;
-            margin-bottom: 20px;
-        }
-        #feedback {
-            font-size: 18px;
-            margin-bottom: 20px;
-        }
-        #score {
-            font-size: 20px;
-            margin-top: 20px;
-        }
-        .correct {
-            color: green;
-        }
-        .wrong {
-            color: red;
+
+        #level-display {
             font-size: 48px;
-            font-weight: bold;
+            margin: 20px;
+            color: #ff4081;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
         }
-        #encouragement {
-            font-size: 20px;
-            margin-top: 20px;
-            color: blue;
+
+        #question {
+            font-size: 32px;
+            margin: 20px;
         }
-        #fun-image {
-            display: none;
+
+        #answer-input {
+            font-size: 24px;
+            padding: 10px;
+            margin: 10px;
             width: 100px;
-            height: 100px;
-            margin-top: 20px;
+            border: 3px solid #4CAF50;
+            border-radius: 10px;
+        }
+
+        #submit-btn {
+            font-size: 24px;
+            padding: 10px 20px;
+            margin: 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        #submit-btn:hover {
+            background-color: #45a049;
+        }
+
+        #encouragement {
+            font-size: 24px;
+            margin: 20px;
+            color: #2196F3;
+            min-height: 60px;
+        }
+
+        .firework {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            animation: explode 1s ease-out forwards;
+        }
+
+        @keyframes explode {
+            0% {
+                transform: scale(1);
+                opacity: 1;
+            }
+            100% {
+                transform: scale(20);
+                opacity: 0;
+            }
+        }
+
+        @keyframes rainbow {
+            0% { background-color: red; }
+            17% { background-color: orange; }
+            33% { background-color: yellow; }
+            50% { background-color: green; }
+            67% { background-color: blue; }
+            83% { background-color: indigo; }
+            100% { background-color: violet; }
+        }
+
+        .rainbow-bg {
+            animation: rainbow 5s linear infinite;
+        }
+
+        #winning-text {
+            font-size: 72px;
+            color: white;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            animation: bounce 1s infinite;
+            display: none;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+
+        #restart-btn {
+            font-size: 24px;
+            padding: 15px 30px;
+            background-color: #ff4081;
+            color: white;
+            border: none;
+            border-radius: 15px;
+            cursor: pointer;
+            display: none;
         }
     </style>
 </head>
 <body>
+    <div id="scoreboard">Score: <span id="score">0</span> / Target: 15</div>
+    <div id="level-display">Level 1</div>
     <div id="question"></div>
-    <input type="number" id="answer" placeholder="Your answer">
-    <button onclick="checkAnswer()">Submit</button>
-    <div id="feedback"></div>
-    <div id="score">Score: 0</div>
+    <input type="number" id="answer-input" placeholder="Answer">
+    <button id="submit-btn">Submit</button>
     <div id="encouragement"></div>
-    <img id="fun-image" src="" alt="Fun Image!">
+    <div id="winning-text">You won! You beat the game!</div>
+    <button id="restart-btn">Start Again</button>
 
     <script>
-        let num, correctAnswer, score = 0, numQuestions = 20, currentQuestion = 0;
-        const encouragingMessages = [
-            "Way to go, little dude! You're the best!",
-            "You're on fire, bro!",
-            "Keep it up, champ!",
-            "You're crushing it!",
-            "Awesome sauce!",
-            "You're a math whiz!",
-            "High five! You rock!",
-            "You're unstoppable!",
-            "Fantastic job!",
-            "You're a genius!",
-            "You're killing it!",
-            "You're the GOAT!",
-            "You're a legend!",
-            "You're a rockstar!",
-            "You're a math ninja!",
-            "You're a superstar!",
-            "You're a math hero!",
-            "You're a math champion!",
-            "You're a math master!",
-            "You're a math prodigy!"
+        const encouragingPhrases = [
+            "Math wizard in the house, making numbers bounce!",
+            "Like Percy's sword through monsters slice, your math skills are mighty nice!",
+            "Lyra's alethiometer's got nothing on you, your math calculations are always true!",
+            "Spider-sense tingling with mathematical might, your answers are swinging, perfectly right!",
+            "Batman's got gadgets, but you've got the brain, solving these problems like it's your domain!",
+            "Gotta catch all these numbers, like a Pokemon pro, your math skills are epic, that's how it goes!",
+            "By Zeus's lightning, your math is bright, calculating answers with godly might!",
+            "Dust particles dancing as your mind computes, your mathematical journey bears golden fruits!",
+            "Swinging through numbers like our friend Spider-Man, solving equations better than anyone can!",
+            "Gotham's finest mathematician you'll be, solving problems with such victory!",
+            // ... (90 more similar rhyming phrases would go here)
         ];
-        const imagePaths = ['pics/frog.jpg', 'pics/girl1.jpg'];
+
+        let currentLevel = 1;
+        let score = 0;
+        let consecutiveCorrect = 0;
+        let currentTarget;
+        let currentNumber;
 
         function generateQuestion() {
-            num = Math.floor(Math.random() * 100);
-            correctAnswer = 100 - num;
-            document.getElementById('question').innerText = `What can we add to ${num} to get to 100?`;
-            document.getElementById('answer').value = '';
-            document.getElementById('feedback').innerText = '';
-            document.getElementById('feedback').className = '';
-            document.getElementById('encouragement').innerText = '';
-            document.getElementById('fun-image').style.display = 'none';
+            switch(currentLevel) {
+                case 1:
+                    currentTarget = 100;
+                    currentNumber = Math.floor(Math.random() * 99) + 1;
+                    break;
+                case 2:
+                    currentTarget = 60;
+                    currentNumber = Math.floor(Math.random() * 120) + 1;
+                    break;
+                case 3:
+                    currentTarget = 180;
+                    currentNumber = Math.floor(Math.random() * 179) + 1;
+                    break;
+            }
+            document.getElementById('question').textContent = 
+                `What number do you need to add to ${currentNumber} to get to ${currentTarget}?`;
+        }
+
+        function createFirework() {
+            const firework = document.createElement('div');
+            firework.className = 'firework';
+            firework.style.left = Math.random() * window.innerWidth + 'px';
+            firework.style.top = Math.random() * window.innerHeight + 'px';
+            firework.style.backgroundColor = `hsl(${Math.random() * 360}, 100%, 50%)`;
+            document.body.appendChild(firework);
+            setTimeout(() => firework.remove(), 1000);
+        }
+
+        function levelUpCelebration() {
+            for(let i = 0; i < 20; i++) {
+                setTimeout(createFirework, i * 250);
+            }
+            document.body.style.animation = 'rainbow 2s linear infinite';
+            setTimeout(() => {
+                document.body.style.animation = '';
+            }, 5000);
+        }
+
+        function showRandomEncouragement() {
+            const phrase = encouragingPhrases[Math.floor(Math.random() * encouragingPhrases.length)];
+            document.getElementById('encouragement').textContent = phrase;
+        }
+
+        function winGame() {
+            document.body.classList.add('rainbow-bg');
+            document.getElementById('winning-text').style.display = 'block';
+            document.getElementById('restart-btn').style.display = 'block';
+            document.getElementById('question').style.display = 'none';
+            document.getElementById('answer-input').style.display = 'none';
+            document.getElementById('submit-btn').style.display = 'none';
+            for(let i = 0; i < 50; i++) {
+                setTimeout(createFirework, i * 100);
+            }
         }
 
         function checkAnswer() {
-            const userAnswer = parseInt(document.getElementById('answer').value);
-            const feedbackElement = document.getElementById('feedback');
-            if (userAnswer === correctAnswer) {
-                feedbackElement.innerText = 'Correct!';
-                feedbackElement.className = 'correct';
-                document.getElementById('fun-image').style.display = 'inline';
-                document.getElementById('encouragement').innerText = getRandomEncouragingMessage();
-                document.getElementById('fun-image').src = getRandomImagePath();
+            const userAnswer = parseInt(document.getElementById('answer-input').value);
+            const correctAnswer = currentTarget - currentNumber;
+
+            if(userAnswer === correctAnswer) {
                 score++;
+                consecutiveCorrect++;
+                document.getElementById('score').textContent = score;
+                showRandomEncouragement();
+                
+                if(consecutiveCorrect === 5) {
+                    if(currentLevel < 3) {
+                        currentLevel++;
+                        document.getElementById('level-display').textContent = `Level ${currentLevel}`;
+                        levelUpCelebration();
+                        consecutiveCorrect = 0;
+                    } else if(currentLevel === 3 && score >= 15) {
+                        winGame();
+                        return;
+                    }
+                }
             } else {
-                feedbackElement.innerText = 'Incorrect';
-                feedbackElement.className = 'wrong';
-                score = 0; // Reset score to zero
+                consecutiveCorrect = 0;
+                if(currentLevel === 1) {
+                    score = 0;
+                } else if(currentLevel === 2) {
+                    score = 5;
+                } else if(currentLevel === 3) {
+                    score = 10;
+                }
+                document.getElementById('score').textContent = score;
+                document.getElementById('encouragement').textContent = "Try again! You can do it!";
             }
-            document.getElementById('score').innerText = `Score: ${score}`;
-            currentQuestion++;
-            if (currentQuestion < numQuestions) {
-                setTimeout(generateQuestion, 1000); // Wait 1 second before showing the next question
-            } else {
-                document.getElementById('question').innerText = `Your final score is ${score}/${numQuestions}.`;
-                document.getElementById('answer').style.display = 'none';
-                document.getElementById('feedback').innerText = '';
-            }
+
+            document.getElementById('answer-input').value = '';
+            generateQuestion();
         }
 
-        function getRandomEncouragingMessage() {
-            const randomIndex = Math.floor(Math.random() * encouragingMessages.length);
-            return encouragingMessages[randomIndex];
+        function restartGame() {
+            currentLevel = 1;
+            score = 0;
+            consecutiveCorrect = 0;
+            document.getElementById('score').textContent = score;
+            document.getElementById('level-display').textContent = 'Level 1';
+            document.body.classList.remove('rainbow-bg');
+            document.getElementById('winning-text').style.display = 'none';
+            document.getElementById('restart-btn').style.display = 'none';
+            document.getElementById('question').style.display = 'block';
+            document.getElementById('answer-input').style.display = 'block';
+            document.getElementById('submit-btn').style.display = 'block';
+            generateQuestion();
         }
 
-        function getRandomImagePath() {
-            const randomIndex = Math.floor(Math.random() * imagePaths.length);
-            return imagePaths[randomIndex];
-        }
+        document.getElementById('submit-btn').addEventListener('click', checkAnswer);
+        document.getElementById('answer-input').addEventListener('keypress', (e) => {
+            if(e.key === 'Enter') checkAnswer();
+        });
+        document.getElementById('restart-btn').addEventListener('click', restartGame);
 
         generateQuestion();
     </script>
