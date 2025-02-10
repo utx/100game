@@ -1,67 +1,112 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Math Adventure Game</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Math Adventure</title>
     <style>
-        body {
-            font-family: 'Comic Sans MS', cursive;
-            text-align: center;
+        @import url('https://fonts.googleapis.com/css2?family=Fredoka+One&display=swap');
+
+        * {
             margin: 0;
-            padding: 20px;
-            transition: background-color 0.5s;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Fredoka One', cursive;
+        }
+
+        body {
             min-height: 100vh;
             display: flex;
             flex-direction: column;
             align-items: center;
+            justify-content: center;
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+            transition: background 0.5s;
+            padding: 20px;
         }
 
-        #scoreboard {
-            font-size: 24px;
-            margin-bottom: 20px;
+        .container {
+            max-width: 800px;
+            width: 100%;
+            text-align: center;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 2rem;
+            border-radius: 20px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
         }
 
-        #level-display {
-            font-size: 48px;
-            margin: 20px;
-            color: #ff4081;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        h1 {
+            font-size: 3rem;
+            color: #2c3e50;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
         }
 
-        #question {
-            font-size: 32px;
-            margin: 20px;
+        .level-display {
+            font-size: 2rem;
+            color: #3498db;
+            margin-bottom: 1rem;
         }
 
-        #answer-input {
-            font-size: 24px;
-            padding: 10px;
-            margin: 10px;
-            width: 100px;
-            border: 3px solid #4CAF50;
+        .score-display {
+            font-size: 1.5rem;
+            color: #e67e22;
+            margin-bottom: 1rem;
+        }
+
+        .question {
+            font-size: 2rem;
+            color: #2c3e50;
+            margin: 2rem 0;
+        }
+
+        input {
+            font-size: 1.5rem;
+            padding: 0.5rem;
+            width: 150px;
+            text-align: center;
+            border: 3px solid #3498db;
             border-radius: 10px;
+            margin: 1rem 0;
         }
 
-        #submit-btn {
-            font-size: 24px;
-            padding: 10px 20px;
-            margin: 10px;
-            background-color: #4CAF50;
+        button {
+            font-size: 1.5rem;
+            padding: 1rem 2rem;
+            background: #3498db;
             color: white;
             border: none;
             border-radius: 10px;
             cursor: pointer;
-            transition: background-color 0.3s;
+            transition: transform 0.2s, background 0.2s;
+            margin: 1rem;
         }
 
-        #submit-btn:hover {
-            background-color: #45a049;
+        button:hover {
+            transform: scale(1.05);
+            background: #2980b9;
         }
 
-        #encouragement {
-            font-size: 24px;
-            margin: 20px;
-            color: #2196F3;
-            min-height: 60px;
+        .feedback {
+            font-size: 1.5rem;
+            margin: 1rem 0;
+        }
+
+        .encouragement {
+            font-size: 1.2rem;
+            color: #27ae60;
+            margin: 1rem 0;
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 10px;
+        }
+
+        .correct {
+            color: #27ae60;
+        }
+
+        .incorrect {
+            color: #e74c3c;
         }
 
         .firework {
@@ -70,6 +115,7 @@
             height: 10px;
             border-radius: 50%;
             animation: explode 1s ease-out forwards;
+            pointer-events: none;
         }
 
         @keyframes explode {
@@ -83,192 +129,415 @@
             }
         }
 
-        @keyframes rainbow {
-            0% { background-color: red; }
-            17% { background-color: orange; }
-            33% { background-color: yellow; }
-            50% { background-color: green; }
-            67% { background-color: blue; }
-            83% { background-color: indigo; }
-            100% { background-color: violet; }
-        }
-
-        .rainbow-bg {
-            animation: rainbow 5s linear infinite;
-        }
-
-        #winning-text {
-            font-size: 72px;
-            color: white;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
-            animation: bounce 1s infinite;
+        .hidden {
             display: none;
         }
 
-        @keyframes bounce {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-20px); }
+        .winning-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4, #ff6b6b, #4ecdc4);
+            background-size: 400% 400%;
+            animation: gradient 15s ease infinite;
+            z-index: 1000;
         }
 
-        #restart-btn {
-            font-size: 24px;
-            padding: 15px 30px;
-            background-color: #ff4081;
-            color: white;
-            border: none;
-            border-radius: 15px;
-            cursor: pointer;
-            display: none;
+        @keyframes gradient {
+            0% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
+        .svg-container {
+            width: 100px;
+            height: 100px;
+            margin: 1rem auto;
         }
     </style>
 </head>
 <body>
-    <div id="scoreboard">Score: <span id="score">0</span> / Target: 15</div>
-    <div id="level-display">Level 1</div>
-    <div id="question"></div>
-    <input type="number" id="answer-input" placeholder="Answer">
-    <button id="submit-btn">Submit</button>
-    <div id="encouragement"></div>
-    <div id="winning-text">You won! You beat the game!</div>
-    <button id="restart-btn">Start Again</button>
+    <div class="container" id="game-container">
+        <!-- Content will be dynamically inserted here -->
+    </div>
 
     <script>
         const encouragingPhrases = [
-            "Math wizard in the house, making numbers bounce!",
-            "Like Percy's sword through monsters slice, your math skills are mighty nice!",
-            "Lyra's alethiometer's got nothing on you, your math calculations are always true!",
-            "Spider-sense tingling with mathematical might, your answers are swinging, perfectly right!",
-            "Batman's got gadgets, but you've got the brain, solving these problems like it's your domain!",
-            "Gotta catch all these numbers, like a Pokemon pro, your math skills are epic, that's how it goes!",
-            "By Zeus's lightning, your math is bright, calculating answers with godly might!",
-            "Dust particles dancing as your mind computes, your mathematical journey bears golden fruits!",
-            "Swinging through numbers like our friend Spider-Man, solving equations better than anyone can!",
-            "Gotham's finest mathematician you'll be, solving problems with such victory!",
-            // ... (90 more similar rhyming phrases would go here)
+            // Superhero themed
+            "Like Spider-Man's web-slinging grace, your math skills are setting the pace!",
+            "Batman's smart, that's for sure, but your math skills are even more pure!",
+            "Thor's hammer's got nothing on you, your calculations always ring true!",
+            "Iron Man's got tech that's neat, but your math skills can't be beat!",
+            "Wonder Woman's got her lasso tight, your math answers are pure delight!",
+            "Like Black Panther's Vibranium shield, your math powers never yield!",
+            "Superman flies through the sky, while your math scores go super high!",
+            "Captain America's shield is round, your math skills are simply profound!",
+            "Hulk may smash with all his might, but your math answers are always right!",
+            "Like Doctor Strange's mystic art, your math skills are super smart!",
+
+            // Pokemon themed
+            "Like Pikachu's electric zap, your math skills hit the perfect snap!",
+            "Charizard's flame burns bright and true, just like these math skills coming from you!",
+            "Mewtwo's powers are legendary, your math skills are just as extraordinary!",
+            "Like Snorlax taking time to think, your math answers never sink!",
+            "Gyarados makes waves with might, your calculations are pure delight!",
+            "Alakazam's psychic mind is strong, your math answers never go wrong!",
+            "Like Eevee with evolutions neat, your math skills can't be beat!",
+            "Gengar's shadow moves with grace, your math skills set the pace!",
+            "Dragonite soars through the air, your math prowess is beyond rare!",
+            "Like Meowth counting his gold with glee, your math skills set you free!",
+
+            // Percy Jackson themed
+            "Like Percy controlling the sea, your math skills flow wild and free!",
+            "Annabeth's wisdom shines so bright, your calculations are pure delight!",
+            "Grover's reed pipes play a tune, your math skills make monsters swoon!",
+            "Like Riptide slashing through the air, your problem-solving skills are rare!",
+            "Camp Half-Blood's where heroes train, your math powers can't be contained!",
+            "Like Zeus's lightning in the sky, your math scores are super high!",
+            "Poseidon's trident points the way, your math skills save the day!",
+            "Like Hades ruling down below, your math knowledge continues to grow!",
+            "Athena's wisdom guides your mind, leaving other scores behind!",
+            "Like Hermes flying swift and true, these math skills belong to you!",
+
+            // Keeper of the Lost Cities themed
+            "Like Sophie's telepathy so bright, your calculations are pure delight!",
+            "Keefe's empathy feels emotions strong, your math answers are never wrong!",
+            "Fitz's cognate training shows the way, your math skills save the day!",
+            "Like Dex's technopath skills so rare, your problem-solving's beyond compare!",
+            "Biana's vanishing act is neat, but your math skills can't be beat!",
+            "Like Tam's shadowvapor dark and cool, your math mind's an amazing tool!",
+            "Linh's hydrokinetics flow with grace, your math skills set the pace!",
+            "Like Marella's pyrokinetic flame, your math prowess wins the game!",
+            "Silveny's flying through the sky, while your math scores soar so high!",
+            "Like Alvar's path through time and space, your calculations find their place!",
+
+            // Ninja Kid themed
+            "Like Nelson's ninja moves so swift, your math skills give you a gift!",
+            "Kenny's gadgets are pretty cool, but your math mind's the perfect tool!",
+            "Like ninja stars thrown with care, your calculations hit with flair!",
+            "Ninja flips and secret spins, your math brain always wins!",
+            "Like shadows moving in the night, your answers are always right!",
+            "Silent steps and ninja grace, your math skills set the pace!",
+            "Like climbing walls with special gear, your problem-solving has no peer!",
+            "Ninja wisdom ancient and true, these math skills belong to you!",
+            "Like martial arts with perfect form, your math skills are far from norm!",
+            "Stealth mode activated with pride, your math talents you can't hide!",
+
+            // Wolf Girl themed
+            "Like Nai tracking through the night, your calculations pure delight!",
+            "Wild and free like wolves that roam, your math skills find their home!",
+            "Like howling at the midnight moon, your math brain's in perfect tune!",
+            "Pack wisdom guides you on your way, your math skills save the day!",
+            "Like wolf cubs learning how to play, your math mind leads the way!",
+            "Sharp as fangs and quick as paws, your math skills break all laws!",
+            "Like tracking prey through forest deep, your calculations you shall keep!",
+            "Wild instincts serve you well, your math powers we can tell!",
+            "Like alpha leading with such grace, your math skills set the pace!",
+            "Forest wisdom ancient and true, these math skills belong to you!",
+
+            // Math and Pi Jokes
+            "Pi goes on forever they say, your math skills work the same way!",
+            "3.14159, that's pi, your math scores are just as high!",
+            "Like circles round and round we go, your math skills continue to grow!",
+            "Pi's infinite digits flow, your math talents really show!",
+            "Like radius times two pi neat, your calculations can't be beat!",
+            "Mathematics infinite and true, these awesome skills belong to you!",
+            "Like pi's digits never end, your math brain's a trusted friend!",
+            "Round and round like pi we spin, your math prowess helps you win!",
+            "Pi Day's fun on March one-four, your math skills unlock every door!",
+            "Circles, spheres, and pi divine, your math answers always shine!",
+
+            // Cool Kid Slang
+            "Yo fam, your math's straight fire lit, every problem's a perfect hit!",
+            "No cap, your skills are super rad, best math moves I've ever had!",
+            "Straight bussin' with these math skills true, calculations perfect through and through!",
+            "Based math genius, that's your vibe, these problems you can't hide!",
+            "Your math game's got that drip for real, solving problems with such zeal!",
+            "Slay all day with numbers neat, your calculations can't be beat!",
+            "Math skills living rent-free in your mind, leaving others far behind!",
+            "Big facts: your math is pretty sweet, making every problem obsolete!",
+            "On fleek calculations day and night, your answers always turn out right!",
+            "Vibe check passed with math so clean, smartest solver I've ever seen!"
         ];
 
-        let currentLevel = 1;
-        let score = 0;
-        let consecutiveCorrect = 0;
-        let currentTarget;
-        let currentNumber;
-
-        function generateQuestion() {
-            switch(currentLevel) {
-                case 1:
-                    currentTarget = 100;
-                    currentNumber = Math.floor(Math.random() * 99) + 1;
-                    break;
-                case 2:
-                    currentTarget = 60;
-                    currentNumber = Math.floor(Math.random() * 120) + 1;
-                    break;
-                case 3:
-                    currentTarget = 180;
-                    currentNumber = Math.floor(Math.random() * 179) + 1;
-                    break;
+        class MathGame {
+            constructor() {
+                this.container = document.getElementById('game-container');
+                this.score = 0;
+                this.targetScore = 20;
+                this.currentLevel = 0;
+                this.consecutiveCorrect = 0;
+                this.levelScores = [0, 5, 10, 15];
+                this.showSplashScreen();
             }
-            document.getElementById('question').textContent = 
-                `What number do you need to add to ${currentNumber} to get to ${currentTarget}?`;
-        }
 
-        function createFirework() {
-            const firework = document.createElement('div');
-            firework.className = 'firework';
-            firework.style.left = Math.random() * window.innerWidth + 'px';
-            firework.style.top = Math.random() * window.innerHeight + 'px';
-            firework.style.backgroundColor = `hsl(${Math.random() * 360}, 100%, 50%)`;
-            document.body.appendChild(firework);
-            setTimeout(() => firework.remove(), 1000);
-        }
-
-        function levelUpCelebration() {
-            for(let i = 0; i < 20; i++) {
-                setTimeout(createFirework, i * 250);
+            showSplashScreen() {
+                this.container.innerHTML = `
+                    <h1>Math Adventure</h1>
+                    <button onclick="game.startGame()">Start Adventure</button>
+                `;
             }
-            document.body.style.animation = 'rainbow 2s linear infinite';
-            setTimeout(() => {
-                document.body.style.animation = '';
-            }, 5000);
-        }
 
-        function showRandomEncouragement() {
-            const phrase = encouragingPhrases[Math.floor(Math.random() * encouragingPhrases.length)];
-            document.getElementById('encouragement').textContent = phrase;
-        }
-
-        function winGame() {
-            document.body.classList.add('rainbow-bg');
-            document.getElementById('winning-text').style.display = 'block';
-            document.getElementById('restart-btn').style.display = 'block';
-            document.getElementById('question').style.display = 'none';
-            document.getElementById('answer-input').style.display = 'none';
-            document.getElementById('submit-btn').style.display = 'none';
-            for(let i = 0; i < 50; i++) {
-                setTimeout(createFirework, i * 100);
+            startGame() {
+                this.score = 0;
+                this.currentLevel = 1;
+                this.consecutiveCorrect = 0;
+                this.showLevel();
             }
-        }
 
-        function checkAnswer() {
-            const userAnswer = parseInt(document.getElementById('answer-input').value);
-            const correctAnswer = currentTarget - currentNumber;
+            showLevel() {
+                this.container.innerHTML = `
+                    <div class="score-display">Score: ${this.score} / ${this.targetScore}</div>
+                    <div class="level-display">Level ${this.currentLevel}</div>
+                    <div class="question"></div>
+                    <input type="number" id="answer" autofocus>
+                    <button onclick="game.checkAnswer()">Submit</button>
+                `;
+                this.generateQuestion();
+                document.getElementById('answer').addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter') game.checkAnswer();
+                });
+            }
 
-            if(userAnswer === correctAnswer) {
-                score++;
-                consecutiveCorrect++;
-                document.getElementById('score').textContent = score;
-                showRandomEncouragement();
+            generateQuestion() {
+                const questionDiv = document.querySelector('.question');
+                this.currentAnswer = 0;
+
+                switch(this.currentLevel) {
+                    case 1:
+                        const num1 = Math.floor(Math.random() * 99) + 1;
+                        this.currentAnswer = 100 - num1;
+                        questionDiv.textContent = `What number do we add to ${num1} to get to 100?`;
+                        break;
+                    case 2:
+                        const num2 = Math.floor(Math.random() * 120) + 1;
+                        if (num2 > 60) {
+                            this.currentAnswer = num2 - 60;
+                            questionDiv.textContent = `What do we need to subtract from ${num2} to get to 60?`;
+                        } else {
+                            this.currentAnswer = 60 - num2;
+                            questionDiv.textContent = `What do we need to add to ${num2} to get to 60?`;
+                        }
+                        break;
+                    case 3:
+                        const a = Math.floor(Math.random() * 30) + 1;
+                        const b = Math.floor(Math.random() * 30) + 1;
+                        this.currentAnswer = a + b;
+                        questionDiv.textContent = `What is ${a} + ${b}?`;
+                        break;
+                    case 4:
+                        const num4 = Math.floor(Math.random() * 160) + 1;
+                        this.currentAnswer = 180 - num4;
+                        questionDiv.textContent = `What number do we add to ${num4} to get to 180?`;
+                        break;
+                }
+            }
+
+            createFirework() {
+                const firework = document.createElement('div');
+                firework.className = 'firework';
+                firework.style.left = Math.random() * window.innerWidth + 'px';
+                firework.style.top = Math.random() * window.innerHeight + 'px';
+                firework.style.backgroundColor = `hsl(${Math.random() * 360}, 100%, 50%)`;
+                document.body.appendChild(firework);
+                setTimeout(() => firework.remove(), 1000);
+            }
+
+            showEncouragement() {
+                const phrase = encouragingPhrases[Math.floor(Math.random() * encouragingPhrases.length)];
                 
-                if(consecutiveCorrect === 5) {
-                    if(currentLevel < 3) {
-                        currentLevel++;
-                        document.getElementById('level-display').textContent = `Level ${currentLevel}`;
-                        levelUpCelebration();
-                        consecutiveCorrect = 0;
-                    } else if(currentLevel === 3 && score >= 15) {
-                        winGame();
-                        return;
-                    }
+                // Clear any existing encouragement
+                const existingEncouragement = document.querySelector('.encouragement-container');
+                if (existingEncouragement) {
+                    existingEncouragement.remove();
                 }
-            } else {
-                consecutiveCorrect = 0;
-                if(currentLevel === 1) {
-                    score = 0;
-                } else if(currentLevel === 2) {
-                    score = 5;
-                } else if(currentLevel === 3) {
-                    score = 10;
-                }
-                document.getElementById('score').textContent = score;
-                document.getElementById('encouragement').textContent = "Try again! You can do it!";
+
+                // Create container for encouragement
+                const encouragementContainer = document.createElement('div');
+                encouragementContainer.className = 'encouragement-container';
+                encouragementContainer.style.cssText = `
+                    position: fixed;
+                    top: 50%;
+                    left: 50%;
+                    transform: translate(-50%, -50%);
+                    background: rgba(255, 255, 255, 0.95);
+                    padding: 2rem;
+                    border-radius: 15px;
+                    box-shadow: 0 0 20px rgba(0,0,0,0.2);
+                    z-index: 1000;
+                    text-align: center;
+                    max-width: 80%;
+                `;
+
+                // Add SVG
+                const svgContainer = document.createElement('div');
+                svgContainer.className = 'svg-container';
+                svgContainer.innerHTML = `
+                    <svg viewBox="0 0 100 100">
+                        <circle cx="50" cy="50" r="40" fill="none" stroke="#27ae60" stroke-width="4">
+                            <animate attributeName="r" from="0" to="40" dur="1s" />
+                            <animate attributeName="stroke-width" from="8" to="4" dur="1s" />
+                        </circle>
+                        <path d="M30 50 L45 65 L70 35" stroke="#27ae60" stroke-width="8" fill="none">
+                            <animate attributeName="stroke-dasharray" from="0,1000" to="1000,0" dur="1s" />
+                        </path>
+                    </svg>
+                `;
+
+                // Add message
+                const encouragement = document.createElement('div');
+                encouragement.className = 'encouragement';
+                encouragement.style.cssText = `
+                    font-size: 1.5rem;
+                    color: #27ae60;
+                    margin-top: 1rem;
+                `;
+                encouragement.textContent = phrase;
+
+                // Add continue button
+                const continueButton = document.createElement('button');
+                continueButton.textContent = 'Continue';
+                continueButton.style.marginTop = '1rem';
+                continueButton.onclick = () => {
+                    encouragementContainer.remove();
+                    this.showLevel();
+                };
+
+                // Assemble and show
+                encouragementContainer.appendChild(svgContainer);
+                encouragementContainer.appendChild(encouragement);
+                encouragementContainer.appendChild(continueButton);
+                document.body.appendChild(encouragementContainer);
             }
 
-            document.getElementById('answer-input').value = '';
-            generateQuestion();
+            checkAnswer() {
+                const userAnswer = parseInt(document.getElementById('answer').value);
+                if (userAnswer === this.currentAnswer) {
+                    this.handleCorrectAnswer();
+                } else {
+                    this.handleIncorrectAnswer();
+                }
+            }
+
+            handleCorrectAnswer() {
+                this.score++;
+                this.consecutiveCorrect++;
+
+                if (this.score >= this.targetScore) {
+                    this.showWinScreen();
+                    return;
+                }
+
+                this.showEncouragement();
+
+                if (this.consecutiveCorrect >= 5) {
+                    if (this.currentLevel < 4) {
+                        this.levelUp();
+                    } else {
+                        this.showLevel();
+                    }
+                } else {
+                    this.showLevel();
+                }
+            }
+
+            handleIncorrectAnswer() {
+                const currentScore = this.score;
+                this.container.innerHTML = `
+                    <div class="score-display">Score: ${this.score} / ${this.targetScore}</div>
+                    <div class="incorrect">❌ Incorrect!</div>
+                    <div class="feedback">The correct answer was ${this.currentAnswer}</div>
+                    <button onclick="game.continueAfterIncorrect(${currentScore})">Continue</button>
+                `;
+            }
+
+            continueAfterIncorrect(prevScore) {
+                this.score = this.levelScores[this.currentLevel - 1];
+                this.consecutiveCorrect = 0;
+                this.showLevel();
+            }
+
+            levelUp() {
+                this.currentLevel++;
+                this.consecutiveCorrect = 0;
+                
+                // Create firework animation
+                for (let i = 0; i < 10; i++) {
+                    setTimeout(() => this.createFirework(), i * 200);
+                }
+
+                setTimeout(() => this.showLevel(), 2000);
+            }
+
+            showWinScreen() {
+                this.container.innerHTML = `
+                    <div class="winning-screen">
+                        <div class="container" style="background: rgba(255, 255, 255, 0.9); padding: 2rem; border-radius: 20px; animation: bounce 1s infinite;">
+                            <h1 style="font-size: 4rem; margin-bottom: 1rem; background: linear-gradient(45deg, #FF0000, #FF7F00, #FFFF00, #00FF00, #0000FF, #4B0082, #8F00FF); -webkit-background-clip: text; -webkit-text-fill-color: transparent; animation: rainbow 5s linear infinite;">You Won!</h1>
+                            <h2 style="font-size: 3rem; margin-bottom: 2rem; background: linear-gradient(45deg, #FF0000, #FF7F00, #FFFF00, #00FF00, #0000FF, #4B0082, #8F00FF); -webkit-background-clip: text; -webkit-text-fill-color: transparent; animation: rainbow 5s linear infinite 0.5s;">You Beat The Game!</h2>
+                            <button onclick="game.startGame()" style="font-size: 2rem; padding: 1rem 2rem; background: linear-gradient(45deg, #FF0000, #FF7F00, #FFFF00, #00FF00, #0000FF, #4B0082, #8F00FF); color: white; border: none; border-radius: 15px; cursor: pointer; animation: pulse 2s infinite;">Restart Adventure</button>
+                        </div>
+                    </div>
+                `;
+
+                // Add new animations to the style
+                const style = document.createElement('style');
+                style.textContent = `
+                    @keyframes rainbow {
+                        0% { background-position: 0% 50%; }
+                        50% { background-position: 100% 50%; }
+                        100% { background-position: 0% 50%; }
+                    }
+                    @keyframes bounce {
+                        0%, 100% { transform: translateY(0); }
+                        50% { transform: translateY(-20px); }
+                    }
+                    @keyframes pulse {
+                        0% { transform: scale(1); }
+                        50% { transform: scale(1.1); }
+                        100% { transform: scale(1); }
+                    }
+                    .winning-screen {
+                        position: fixed;
+                        top: 0;
+                        left: 0;
+                        width: 100%;
+                        height: 100%;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        background: linear-gradient(45deg, #ff6b6b, #4ecdc4, #ff6b6b, #4ecdc4);
+                        background-size: 400% 400%;
+                        animation: gradient 15s ease infinite;
+                        z-index: 1000;
+                    }
+                `;
+                document.head.appendChild(style);
+
+                // Create continuous fireworks
+                const fireworkInterval = setInterval(() => {
+                    for (let i = 0; i < 3; i++) {
+                        this.createFirework();
+                    }
+                }, 100);
+
+                // Keep the fireworks going longer and create more of them
+                setTimeout(() => clearInterval(fireworkInterval), 10000);
+            }
         }
 
-        function restartGame() {
-            currentLevel = 1;
-            score = 0;
-            consecutiveCorrect = 0;
-            document.getElementById('score').textContent = score;
-            document.getElementById('level-display').textContent = 'Level 1';
-            document.body.classList.remove('rainbow-bg');
-            document.getElementById('winning-text').style.display = 'none';
-            document.getElementById('restart-btn').style.display = 'none';
-            document.getElementById('question').style.display = 'block';
-            document.getElementById('answer-input').style.display = 'block';
-            document.getElementById('submit-btn').style.display = 'block';
-            generateQuestion();
-        }
-
-        document.getElementById('submit-btn').addEventListener('click', checkAnswer);
-        document.getElementById('answer-input').addEventListener('keypress', (e) => {
-            if(e.key === 'Enter') checkAnswer();
-        });
-        document.getElementById('restart-btn').addEventListener('click', restartGame);
-
-        generateQuestion();
+        const game = new MathGame();
     </script>
 </body>
 </html>
