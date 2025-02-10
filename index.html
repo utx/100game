@@ -173,128 +173,93 @@
     </div>
 
     <script>
-        const encouragingPhrases = [
-            // Superhero themed
-            "Like Spider-Man's web-slinging grace, your math skills are setting the pace!",
-            "Batman's smart, that's for sure, but your math skills are even more pure!",
-            "Thor's hammer's got nothing on you, your calculations always ring true!",
-            "Iron Man's got tech that's neat, but your math skills can't be beat!",
-            "Wonder Woman's got her lasso tight, your math answers are pure delight!",
-            "Like Black Panther's Vibranium shield, your math powers never yield!",
-            "Superman flies through the sky, while your math scores go super high!",
-            "Captain America's shield is round, your math skills are simply profound!",
-            "Hulk may smash with all his might, but your math answers are always right!",
-            "Like Doctor Strange's mystic art, your math skills are super smart!",
+        const hannahPhrases = [
+    // KOTLC themed
+    "Like Sophie's telepathy taking flight, your math skills are shining bright!",
+    "Keefe's empathy might be strong and true, but these math skills belong to you!",
+    "Like Fitz's cognate power so rare, your calculations show such flair!",
+    "Biana may vanish from sight with ease, but your math skills are sure to please!",
+    "Like the Black Swan's secret might, your numbers always turn out right!",
 
-            // Pokemon themed
-            "Like Pikachu's electric zap, your math skills hit the perfect snap!",
-            "Charizard's flame burns bright and true, just like these math skills coming from you!",
-            "Mewtwo's powers are legendary, your math skills are just as extraordinary!",
-            "Like Snorlax taking time to think, your math answers never sink!",
-            "Gyarados makes waves with might, your calculations are pure delight!",
-            "Alakazam's psychic mind is strong, your math answers never go wrong!",
-            "Like Eevee with evolutions neat, your math skills can't be beat!",
-            "Gengar's shadow moves with grace, your math skills set the pace!",
-            "Dragonite soars through the air, your math prowess is beyond rare!",
-            "Like Meowth counting his gold with glee, your math skills set you free!",
+    // Percy Jackson themed
+    "Like Percy's waves that crash and flow, your math skills continue to grow!",
+    "Wise as Annabeth's strategic mind, your solutions are one of a kind!",
+    "Like Riptide slashing through the air, your problem-solving skills are rare!",
+    "Zeus's lightning may light up the sky, but your math scores are twice as high!",
+    "Like Athena's wisdom sharp and bright, your calculations are pure delight!",
 
-            // Percy Jackson themed
-            "Like Percy controlling the sea, your math skills flow wild and free!",
-            "Annabeth's wisdom shines so bright, your calculations are pure delight!",
-            "Grover's reed pipes play a tune, your math skills make monsters swoon!",
-            "Like Riptide slashing through the air, your problem-solving skills are rare!",
-            "Camp Half-Blood's where heroes train, your math powers can't be contained!",
-            "Like Zeus's lightning in the sky, your math scores are super high!",
-            "Poseidon's trident points the way, your math skills save the day!",
-            "Like Hades ruling down below, your math knowledge continues to grow!",
-            "Athena's wisdom guides your mind, leaving other scores behind!",
-            "Like Hermes flying swift and true, these math skills belong to you!",
+    // His Dark Materials themed
+    "Like Lyra's alethiometer spinning true, these math problems are no match for you!",
+    "Iorek's armor shines with pride, your math skills can't be denied!",
+    "Like Lord Asriel's bridge of light, your answers are a brilliant sight!",
+    "Pan may change his shape with flair, your math skills are beyond compare!",
+    "Like dust that glitters in the air, your problem-solving skills are rare!",
 
-            // Keeper of the Lost Cities themed
-            "Like Sophie's telepathy so bright, your calculations are pure delight!",
-            "Keefe's empathy feels emotions strong, your math answers are never wrong!",
-            "Fitz's cognate training shows the way, your math skills save the day!",
-            "Like Dex's technopath skills so rare, your problem-solving's beyond compare!",
-            "Biana's vanishing act is neat, but your math skills can't be beat!",
-            "Like Tam's shadowvapor dark and cool, your math mind's an amazing tool!",
-            "Linh's hydrokinetics flow with grace, your math skills set the pace!",
-            "Like Marella's pyrokinetic flame, your math prowess wins the game!",
-            "Silveny's flying through the sky, while your math scores soar so high!",
-            "Like Alvar's path through time and space, your calculations find their place!",
+    // Math themed
+    "Pi goes on and on all day, your math skills work the same way!",
+    "Numbers dancing, equations flow, your math talent continues to grow!",
+    "Addition, subtraction, all in line, your calculations turn out fine!",
+    "Mathematics flowing crisp and clean, smartest solver I've ever seen!",
+    "Equations spinning round and round, your solutions always turn out sound!"
+];
 
-            // Ninja Kid themed
-            "Like Nelson's ninja moves so swift, your math skills give you a gift!",
-            "Kenny's gadgets are pretty cool, but your math mind's the perfect tool!",
-            "Like ninja stars thrown with care, your calculations hit with flair!",
-            "Ninja flips and secret spins, your math brain always wins!",
-            "Like shadows moving in the night, your answers are always right!",
-            "Silent steps and ninja grace, your math skills set the pace!",
-            "Like climbing walls with special gear, your problem-solving has no peer!",
-            "Ninja wisdom ancient and true, these math skills belong to you!",
-            "Like martial arts with perfect form, your math skills are far from norm!",
-            "Stealth mode activated with pride, your math talents you can't hide!",
+const alexanderPhrases = [
+    // Pokemon themed
+    "Like Pikachu's thunderbolt so bright, your calculations are pure delight!",
+    "Charizard's flame may burn with might, but your math skills win the fight!",
+    "Like Mewtwo's power beyond compare, your problem-solving skills are rare!",
+    "Greninja moves with ninja grace, your math skills set the pace!",
+    "Like Garchomp soaring through the sky, your math scores are super high!",
 
-            // Wolf Girl themed
-            "Like Nai tracking through the night, your calculations pure delight!",
-            "Wild and free like wolves that roam, your math skills find their home!",
-            "Like howling at the midnight moon, your math brain's in perfect tune!",
-            "Pack wisdom guides you on your way, your math skills save the day!",
-            "Like wolf cubs learning how to play, your math mind leads the way!",
-            "Sharp as fangs and quick as paws, your math skills break all laws!",
-            "Like tracking prey through forest deep, your calculations you shall keep!",
-            "Wild instincts serve you well, your math powers we can tell!",
-            "Like alpha leading with such grace, your math skills set the pace!",
-            "Forest wisdom ancient and true, these math skills belong to you!",
+    // Real Madrid themed
+    "Like Vini Jr. dribbling with flair, your math skills are beyond compare!",
+    "Mbappe's speed may steal the show, but your math skills continue to grow!",
+    "Like Modric's passes smooth and true, these calculations belong to you!",
+    "Benzema scores with perfect might, your answers always turn out right!",
+    "Like Madrid's glory pure and white, your math skills shine so bright!",
 
-            // Math and Pi Jokes
-            "Pi goes on forever they say, your math skills work the same way!",
-            "3.14159, that's pi, your math scores are just as high!",
-            "Like circles round and round we go, your math skills continue to grow!",
-            "Pi's infinite digits flow, your math talents really show!",
-            "Like radius times two pi neat, your calculations can't be beat!",
-            "Mathematics infinite and true, these awesome skills belong to you!",
-            "Like pi's digits never end, your math brain's a trusted friend!",
-            "Round and round like pi we spin, your math prowess helps you win!",
-            "Pi Day's fun on March one-four, your math skills unlock every door!",
-            "Circles, spheres, and pi divine, your math answers always shine!",
+    // Man United themed
+    "Like Bruno's penalties finding net, you're the best mathematician we've met!",
+    "Rashford's pace may lead the way, but your math skills save the day!",
+    "Like United's glory at Old Trafford's sight, your calculations pure delight!",
+    "Martinez guards with fierce pride, your math skills can't be denied!",
+    "Like Fernandes' passes swift and true, these math problems are no match for you!",
 
-            // Cool Kid Slang
-            "Yo fam, your math's straight fire lit, every problem's a perfect hit!",
-            "No cap, your skills are super rad, best math moves I've ever had!",
-            "Straight bussin' with these math skills true, calculations perfect through and through!",
-            "Based math genius, that's your vibe, these problems you can't hide!",
-            "Your math game's got that drip for real, solving problems with such zeal!",
-            "Slay all day with numbers neat, your calculations can't be beat!",
-            "Math skills living rent-free in your mind, leaving others far behind!",
-            "Big facts: your math is pretty sweet, making every problem obsolete!",
-            "On fleek calculations day and night, your answers always turn out right!",
-            "Vibe check passed with math so clean, smartest solver I've ever seen!"
-        ];
+    // Superhero themed
+    "Like Spider-Man's web-slinging might, your calculations turn out right!",
+    "Batman's gadgets may be cool, but your math mind's the perfect tool!",
+    "Like Iron Man's suit taking flight, your answers shine so bright!",
+    "Thor's hammer strikes with thunder true, these math skills belong to you!",
+    "Like Captain America's shield so round, your solutions always turn out sound!"
+];
 
         class MathGame {
-            constructor() {
-                this.container = document.getElementById('game-container');
-                this.score = 0;
-                this.targetScore = 20;
-                this.currentLevel = 0;
-                this.consecutiveCorrect = 0;
-                this.levelScores = [0, 5, 10, 15];
-                this.showSplashScreen();
-            }
+           constructor() {
+    this.container = document.getElementById('game-container');
+    this.score = 0;
+    this.targetScore = 20;
+    this.currentLevel = 0;
+    this.consecutiveCorrect = 0;
+    this.levelScores = [0, 5, 10, 15];
+    this.player = null;  // Add this line
+    this.showSplashScreen();
+}
 
             showSplashScreen() {
-                this.container.innerHTML = `
-                    <h1>Math Adventure</h1>
-                    <button onclick="game.startGame()">Start Adventure</button>
-                `;
-            }
+    this.container.innerHTML = `
+        <h1>Math Adventure</h1>
+        <button onclick="game.startGame('Hannah')" style="margin: 10px;">Hannah - Start Adventure</button>
+        <button onclick="game.startGame('Alexander')" style="margin: 10px;">Alexander - Start Adventure</button>
+    `;
+}
 
-            startGame() {
-                this.score = 0;
-                this.currentLevel = 1;
-                this.consecutiveCorrect = 0;
-                this.showLevel();
-            }
+            startGame(playerName) {
+    this.player = playerName;
+    this.score = 0;
+    this.currentLevel = 1;
+    this.consecutiveCorrect = 0;
+    this.showLevel();
+}
 
             showLevel() {
                 this.container.innerHTML = `
@@ -313,36 +278,34 @@
             generateQuestion() {
                 const questionDiv = document.querySelector('.question');
                 this.currentAnswer = 0;
-
-                switch(this.currentLevel) {
-                    case 1:
-                        const num1 = Math.floor(Math.random() * 99) + 1;
-                        this.currentAnswer = 100 - num1;
-                        questionDiv.textContent = `What number do we add to ${num1} to get to 100?`;
-                        break;
-                    case 2:
-                        const num2 = Math.floor(Math.random() * 120) + 1;
-                        if (num2 > 60) {
-                            this.currentAnswer = num2 - 60;
-                            questionDiv.textContent = `What do we need to subtract from ${num2} to get to 60?`;
-                        } else {
-                            this.currentAnswer = 60 - num2;
-                            questionDiv.textContent = `What do we need to add to ${num2} to get to 60?`;
-                        }
-                        break;
-                    case 3:
-                        const a = Math.floor(Math.random() * 30) + 1;
-                        const b = Math.floor(Math.random() * 30) + 1;
-                        this.currentAnswer = a + b;
-                        questionDiv.textContent = `What is ${a} + ${b}?`;
-                        break;
-                    case 4:
-                        const num4 = Math.floor(Math.random() * 160) + 1;
-                        this.currentAnswer = 180 - num4;
-                        questionDiv.textContent = `What number do we add to ${num4} to get to 180?`;
-                        break;
-                }
-            }
+switch(this.currentLevel) {
+    case 1:
+        const a = Math.floor(Math.random() * 30) + 1;
+        const b = Math.floor(Math.random() * 30) + 1;
+        this.currentAnswer = a + b;
+        questionDiv.textContent = `What is ${a} + ${b}?`;
+        break;
+    case 2:
+        const num2 = Math.floor(Math.random() * 120) + 1;
+        if (num2 > 60) {
+            this.currentAnswer = num2 - 60;
+            questionDiv.textContent = `What do we need to subtract from ${num2} to get to 60?`;
+        } else {
+            this.currentAnswer = 60 - num2;
+            questionDiv.textContent = `What do we need to add to ${num2} to get to 60?`;
+        }
+        break;
+    case 3:
+        const num1 = Math.floor(Math.random() * 99) + 1;
+        this.currentAnswer = 100 - num1;
+        questionDiv.textContent = `What number do we add to ${num1} to get to 100?`;
+        break;
+    case 4:
+        const num4 = Math.floor(Math.random() * 160) + 1;
+        this.currentAnswer = 180 - num4;
+        questionDiv.textContent = `What number do we add to ${num4} to get to 180?`;
+        break;
+}            }
 
             createFirework() {
                 const firework = document.createElement('div');
@@ -355,7 +318,8 @@
             }
 
             showEncouragement() {
-                const phrase = encouragingPhrases[Math.floor(Math.random() * encouragingPhrases.length)];
+                const phrases = this.player === 'Hannah' ? hannahPhrases : alexanderPhrases;
+const phrase = phrases[Math.floor(Math.random() * phrases.length)];
                 
                 // Clear any existing encouragement
                 const existingEncouragement = document.querySelector('.encouragement-container');
@@ -469,16 +433,66 @@
             }
 
             levelUp() {
-                this.currentLevel++;
-                this.consecutiveCorrect = 0;
-                
-                // Create firework animation
-                for (let i = 0; i < 10; i++) {
-                    setTimeout(() => this.createFirework(), i * 200);
-                }
-
-                setTimeout(() => this.showLevel(), 2000);
-            }
+    this.currentLevel++;
+    this.consecutiveCorrect = 0;
+    
+    // Define background colors for each level
+    const levelColors = {
+        1: 'linear-gradient(45deg, #ff6b6b, #4ecdc4)',
+        2: 'linear-gradient(45deg, #4facfe, #00f2fe)',
+        3: 'linear-gradient(45deg, #667eea, #764ba2)',
+        4: 'linear-gradient(45deg, #f83600, #f9d423)'
+    };
+    
+    // Change background color
+    document.body.style.background = levelColors[this.currentLevel];
+    
+    // Create and show level up notification
+    const levelUpNotice = document.createElement('div');
+    levelUpNotice.textContent = 'Levelled Up!';
+    levelUpNotice.style.cssText = `
+        position: fixed;
+        top: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: rgba(255, 255, 255, 0.9);
+        padding: 15px 30px;
+        border-radius: 10px;
+        font-size: 2rem;
+        color: #2c3e50;
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+        z-index: 1000;
+        animation: slideDown 0.5s ease-out;
+    `;
+    
+    // Add animation keyframes
+    const style = document.createElement('style');
+    style.textContent = `
+        @keyframes slideDown {
+            0% { transform: translate(-50%, -100%); }
+            100% { transform: translate(-50%, 0); }
+        }
+    `;
+    document.head.appendChild(style);
+    
+    // Add to document
+    document.body.appendChild(levelUpNotice);
+    
+    // Create firework animation
+    for (let i = 0; i < 10; i++) {
+        setTimeout(() => this.createFirework(), i * 200);
+    }
+    
+    // Remove level up notice after 5 seconds and continue game
+    setTimeout(() => {
+        levelUpNotice.style.animation = 'fadeOut 0.5s ease-out';
+        setTimeout(() => {
+            levelUpNotice.remove();
+            style.remove();
+        }, 500);
+        this.showLevel();
+    }, 5000);
+}
 
             showWinScreen() {
                 this.container.innerHTML = `
