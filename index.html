@@ -237,10 +237,10 @@ const alexanderPhrases = [
            constructor() {
     this.container = document.getElementById('game-container');
     this.score = 0;
-    this.targetScore = 20;
+    this.targetScore = 30;
     this.currentLevel = 0;
     this.consecutiveCorrect = 0;
-    this.levelScores = [0, 5, 10, 15];
+    this.levelScores = [0, 5, 10, 15, 20, 25];
     this.player = null;  // Add this line
     this.showSplashScreen();
 }
@@ -276,36 +276,129 @@ const alexanderPhrases = [
             }
 
             generateQuestion() {
-                const questionDiv = document.querySelector('.question');
-                this.currentAnswer = 0;
-switch(this.currentLevel) {
-    case 1:
-        const a = Math.floor(Math.random() * 30) + 1;
-        const b = Math.floor(Math.random() * 30) + 1;
-        this.currentAnswer = a + b;
-        questionDiv.textContent = `What is ${a} + ${b}?`;
-        break;
-    case 2:
-        const num2 = Math.floor(Math.random() * 120) + 1;
-        if (num2 > 60) {
-            this.currentAnswer = num2 - 60;
-            questionDiv.textContent = `What do we need to subtract from ${num2} to get to 60?`;
-        } else {
-            this.currentAnswer = 60 - num2;
-            questionDiv.textContent = `What do we need to add to ${num2} to get to 60?`;
-        }
-        break;
-    case 3:
-        const num1 = Math.floor(Math.random() * 99) + 1;
-        this.currentAnswer = 100 - num1;
-        questionDiv.textContent = `What number do we add to ${num1} to get to 100?`;
-        break;
-    case 4:
-        const num4 = Math.floor(Math.random() * 160) + 1;
-        this.currentAnswer = 180 - num4;
-        questionDiv.textContent = `What number do we add to ${num4} to get to 180?`;
-        break;
-}            }
+    const questionDiv = document.querySelector('.question');
+    this.currentAnswer = 0;
+
+    // Helper function for clock drawing (only used in levels 5-6)
+    const drawClock = (hours, minutes) => {
+        hours = hours > 12 ? hours - 12 : hours;
+        const hourAngle = (hours + minutes/60) * 30;
+        const minuteAngle = minutes * 6;
+        
+        return `
+            <svg viewBox="0 0 200 200" width="200" height="200" style="margin: 20px auto;">
+                <circle cx="100" cy="100" r="90" fill="white" stroke="black" stroke-width="2"/>
+                ${[...Array(12)].map((_, i) => {
+                    const angle = i * 30;
+                    const x1 = 100 + 80 * Math.sin(angle * Math.PI / 180);
+                    const y1 = 100 - 80 * Math.cos(angle * Math.PI / 180);
+                    const x2 = 100 + 90 * Math.sin(angle * Math.PI / 180);
+                    const y2 = 100 - 90 * Math.cos(angle * Math.PI / 180);
+                    return `<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="black" stroke-width="2"/>`;
+                }).join('')}
+                ${[...Array(12)].map((_, i) => {
+                    const angle = i * 30;
+                    const x = 100 + 65 * Math.sin(angle * Math.PI / 180);
+                    const y = 100 - 65 * Math.cos(angle * Math.PI / 180);
+                    return `<text x="${x}" y="${y}" text-anchor="middle" dominant-baseline="middle" font-size="12">${i === 0 ? 12 : i}</text>`;
+                }).join('')}
+                <line 
+                    x1="100" y1="100" 
+                    x2="${100 + 50 * Math.sin(hourAngle * Math.PI / 180)}" 
+                    y2="${100 - 50 * Math.cos(hourAngle * Math.PI / 180)}" 
+                    stroke="black" stroke-width="4"
+                />
+                <line 
+                    x1="100" y1="100" 
+                    x2="${100 + 70 * Math.sin(minuteAngle * Math.PI / 180)}" 
+                    y2="${100 - 70 * Math.cos(minuteAngle * Math.PI / 180)}" 
+                    stroke="black" stroke-width="2"
+                />
+                <circle cx="100" cy="100" r="3" fill="black"/>
+            </svg>
+        `;
+    };
+
+    switch(this.currentLevel) {
+        case 1:
+            const a = Math.floor(Math.random() * 30) + 1;
+            const b = Math.floor(Math.random() * 30) + 1;
+            this.currentAnswer = a + b;
+            questionDiv.textContent = `What is ${a} + ${b}?`;
+            break;
+
+        case 2:
+            const num2 = Math.floor(Math.random() * 120) + 1;
+            if (num2 > 60) {
+                this.currentAnswer = num2 - 60;
+                questionDiv.textContent = `What do we need to subtract from ${num2} to get to 60?`;
+            } else {
+                this.currentAnswer = 60 - num2;
+                questionDiv.textContent = `What do we need to add to ${num2} to get to 60?`;
+            }
+            break;
+
+        case 3:
+            const num1 = Math.floor(Math.random() * 99) + 1;
+            this.currentAnswer = 100 - num1;
+            questionDiv.textContent = `What number do we add to ${num1} to get to 100?`;
+            break;
+
+        case 4:
+            const num4 = Math.floor(Math.random() * 160) + 1;
+            this.currentAnswer = 180 - num4;
+            questionDiv.textContent = `What number do we add to ${num4} to get to 180?`;
+            break;
+
+        case 5:
+            // Multiplication questions
+            const tables = this.currentLevel === 5 ? [2, 5, 10] : [3, 4, 6];
+            const multiplier = tables[Math.floor(Math.random() * tables.length)];
+            const num = Math.floor(Math.random() * 12) + 1;
+            this.currentAnswer = multiplier * num;
+            questionDiv.textContent = `What is ${multiplier} × ${num}?`;
+            break;
+
+        case 6:
+            // Clock questions
+            const clockType = Math.floor(Math.random() * 4);
+            const hour = Math.floor(Math.random() * 12) + 1;
+            let minutes, timeDescription;
+
+            switch(clockType) {
+                case 0: // O'clock
+                    minutes = 0;
+                    timeDescription = "o'clock";
+                    break;
+                case 1: // Quarter past
+                    minutes = 15;
+                    timeDescription = "quarter past";
+                    break;
+                case 2: // Half past
+                    minutes = 30;
+                    timeDescription = "half past";
+                    break;
+                case 3: // Quarter to
+                    minutes = 45;
+                    timeDescription = "quarter to";
+                    break;
+            }
+
+            this.currentAnswer = `${hour}:${minutes.toString().padStart(2, '0')}`;
+            questionDiv.innerHTML = `
+                ${drawClock(hour, minutes)}
+                <p>What time is shown on the clock? (Use format H:MM, e.g., 3:00)</p>
+            `;
+
+            // Change input type to text for clock questions
+            const input = document.getElementById('answer');
+            if (input) {
+                input.type = 'text';
+                input.placeholder = 'H:MM';
+            }
+            break;
+    }
+}
 
             createFirework() {
                 const firework = document.createElement('div');
@@ -386,13 +479,24 @@ const phrase = phrases[Math.floor(Math.random() * phrases.length)];
             }
 
             checkAnswer() {
-                const userAnswer = parseInt(document.getElementById('answer').value);
-                if (userAnswer === this.currentAnswer) {
-                    this.handleCorrectAnswer();
-                } else {
-                    this.handleIncorrectAnswer();
-                }
-            }
+    if (this.currentLevel === 6) {
+        const userAnswer = document.getElementById('answer').value.trim();
+        const normalizedUserAnswer = userAnswer.replace(/^0/, '');
+        const normalizedCorrectAnswer = this.currentAnswer.replace(/^0/, '');
+        if (normalizedUserAnswer === normalizedCorrectAnswer) {
+            this.handleCorrectAnswer();
+        } else {
+            this.handleIncorrectAnswer();
+        }
+    } else {
+        const userAnswer = parseInt(document.getElementById('answer').value);
+        if (userAnswer === this.currentAnswer) {
+            this.handleCorrectAnswer();
+        } else {
+            this.handleIncorrectAnswer();
+        }
+    }
+}
 
             handleCorrectAnswer() {
                 this.score++;
@@ -406,7 +510,7 @@ const phrase = phrases[Math.floor(Math.random() * phrases.length)];
                 this.showEncouragement();
 
                 if (this.consecutiveCorrect >= 5) {
-                    if (this.currentLevel < 4) {
+                    if (this.currentLevel < 6) {
                         this.levelUp();
                     } else {
                         this.showLevel();
@@ -438,11 +542,13 @@ const phrase = phrases[Math.floor(Math.random() * phrases.length)];
     
     // Define background colors for each level
     const levelColors = {
-        1: 'linear-gradient(45deg, #ff6b6b, #4ecdc4)',
-        2: 'linear-gradient(45deg, #4facfe, #00f2fe)',
-        3: 'linear-gradient(45deg, #667eea, #764ba2)',
-        4: 'linear-gradient(45deg, #f83600, #f9d423)'
-    };
+    1: 'linear-gradient(45deg, #ff6b6b, #4ecdc4)',
+    2: 'linear-gradient(45deg, #4facfe, #00f2fe)',
+    3: 'linear-gradient(45deg, #667eea, #764ba2)',
+    4: 'linear-gradient(45deg, #f83600, #f9d423)',
+    5: 'linear-gradient(45deg, #a8e063, #56ab2f)',
+    6: 'linear-gradient(45deg, #ee0979, #ff6a00)'
+};
     
     // Change background color
     document.body.style.background = levelColors[this.currentLevel];
